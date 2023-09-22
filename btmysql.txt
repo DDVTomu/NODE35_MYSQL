@@ -1,0 +1,78 @@
+CREATE DATABASE IF NOT EXISTS BC50_FOOD;
+USE BC50_FOOD;
+
+-- Table: food_type
+CREATE TABLE IF NOT EXISTS food_type (
+	type_id int NOT NULL AUTO_INCREMENT,
+	type_name varchar(255),
+	PRIMARY KEY (type_id)
+);
+
+-- Table: food
+CREATE TABLE IF NOT EXISTS food (
+	food_id int NOT NULL AUTO_INCREMENT,
+    food_name varchar(255) NOT NULL,
+    image varchar(255) NOT NULL,
+    price float NOT NULL,
+    food_description varchar(255) DEFAULT NULL, -- Changed column name to food_description
+    type_id int, -- Add a type_id column for the foreign key reference
+    PRIMARY KEY (food_id),
+    FOREIGN KEY (type_id) REFERENCES food_type(type_id)
+);
+
+-- Table: sub_food
+CREATE TABLE IF NOT EXISTS sub_food (
+	sub_id int NOT NULL AUTO_INCREMENT,
+    sub_name varchar(255) NOT NULL,
+    sub_price float NOT NULL,
+    PRIMARY KEY (sub_id)
+);
+
+-- Table: user
+CREATE TABLE IF NOT EXISTS user (
+	user_id int NOT NULL AUTO_INCREMENT,
+    full_name varchar(255) NOT NULL,
+    email varchar(255) NOT NULL,
+    password varchar(255) NOT NULL,
+    PRIMARY KEY (user_id)
+);
+
+-- Table: user_order
+CREATE TABLE IF NOT EXISTS user_order (
+	order_id int NOT NULL AUTO_INCREMENT,
+    amount int NOT NULL,
+    code varchar(255) NOT NULL,
+    -- user_id int, -- Add a user_id column for the foreign key reference
+    -- food_id int, -- Add a food_id column for the foreign key reference
+    PRIMARY KEY (order_id)
+    -- FOREIGN KEY (user_id) REFERENCES user(user_id),
+    -- FOREIGN KEY (food_id) REFERENCES food(food_id)
+);
+
+-- Table: restaurant
+CREATE TABLE IF NOT EXISTS restaurant (
+	res_id int NOT NULL AUTO_INCREMENT,
+    res_name varchar(255) NOT NULL,
+    image varchar(255) NOT NULL,
+    restaurant_description varchar(255) DEFAULT NULL, -- Changed column name to restaurant_description
+    PRIMARY KEY (res_id)
+);
+
+-- Table: like_res
+CREATE TABLE IF NOT EXISTS like_res (
+	date_like datetime NOT NULL,
+    user_id int, -- Add a user_id column for the foreign key reference
+    res_id int, -- Add a res_id column for the foreign key reference
+	FOREIGN KEY (user_id) REFERENCES user(user_id),
+	FOREIGN KEY (res_id) REFERENCES restaurant(res_id)
+);
+
+-- Table: rate_res
+CREATE TABLE IF NOT EXISTS rate_res (
+	amount int NOT NULL,
+	date_rate datetime NOT NULL,
+    user_id int, -- Add a user_id column for the foreign key reference
+    res_id int, -- Add a res_id column for the foreign key reference
+	FOREIGN KEY (user_id) REFERENCES user(user_id),
+	FOREIGN KEY (res_id) REFERENCES restaurant(res_id)
+);
